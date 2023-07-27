@@ -1,0 +1,15 @@
+{
+    "DKK": {
+        "MinCashUnit": 0.5,
+        "LowerBoundary": 0.25,
+        "UpperBoundary": 0.74,
+        "BasePrecision": 1
+
+    },
+    "CAD": {
+        "MinCashUnit": 0.05,
+        "LowerBoundary": 0.03,
+        "UpperBoundary": 0.07,
+        "BasePrecision": 0.1
+    }
+}

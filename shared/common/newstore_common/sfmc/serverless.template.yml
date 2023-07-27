@@ -1,0 +1,78 @@
+service: sfmc-transctional-mails
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: false
+  tenant: ganni
+  account_id: 1212
+  role: arn:aws:iam::${self:custom.account_id}:role/LambdaExecutionRole
+  event_queue: ${self:custom.tenant}-sfmc-event-queue
+  event_dlq: ${self:custom.tenant}-sfmc-event-dlq
+  sender_name: newstore test
+  sender_mail: dev@newstore.com
+
+
+package:
+  exclude:
+    - "node_modules/**"
+    - ".venv/**"
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: ${opt:stage, 'x'}
+  region: us-east-1
+  deploymentBucket: ${self:custom.tenant}-${self:provider.stage}-0-newstore-dmz
+  environment:
+    TENANT: ${self:custom.tenant}
+    STAGE: ${self:provider.stage}
+    EVENT_QUEUE: ${self:custom.event_queue}
+    EVENT_DLQ: ${self:custom.event_dlq}
+  role: ${self:custom.role}
+
+functions:
+  dequeuer:
+    handler: sfmc_mails.aws.dequeuer.handle
+    environment:
+      SENDER_NAME: ${self:custom.sender_name}
+      SENDER_MAIL: ${self:custom.sender_mail}
+      NS_USER: ${ssm:/NEWSTORE/API/USER}
+      NS_PASSWORD: ${ssm:/NEWSTORE/API/PASSWORD}
+      SFMC_CLIENT_ID: ${ssm:/SFMC/API/CLIENT_ID}
+      SFMC_CLIENT_SECRET: ${ssm:/SFMC/API/CLIENT_SECRET}
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - EventQueue
+              - Arn
+          batchSize: 1
+  enqueuer:
+    handler: sfmc_mails.aws.enqueuer.handle
+    events:
+      - http:
+          path: event-stream-webhook
+          method: post
+
+
+resources:
+  Resources:
+    EventQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${self:custom.event_queue}
+        RedrivePolicy:
+          maxReceiveCount: 5
+          deadLetterTargetArn:
+            "Fn::GetAtt":
+              - EventDLQ
+              - Arn
+    EventDLQ:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: ${self:custom.event_dlq}
+        MessageRetentionPeriod: 1209600
+
