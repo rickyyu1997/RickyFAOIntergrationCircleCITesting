@@ -8,14 +8,10 @@ verify_ssl = true
 [packages]
 boto3 = "==1.17.52"
 pyjwt = "==2.0.1"
-moto = "==2.0.5"
-requests_mock = "==1.8.0"
-freezegun = "==1.1.0"
 cryptography="==3.4.7"
 newstore-common = {path = "./../../shared/common"}
 newstore-adapter = {path = "./../../shared/newstore_adapter"}
 param-store = {path = "./../../shared/3.6/param_store"}
-pom-common = {path = "./../../shared/pom_common"}
 requests = "==2.25.1"
 
 [requires]
