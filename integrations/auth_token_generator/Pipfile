@@ -11,6 +11,7 @@ pyjwt = "==2.0.1"
 moto = "==2.0.5"
 requests_mock = "==1.8.0"
 freezegun = "==1.1.0"
+pyyaml = "==5.4.1"
 cryptography="==3.4.7"
 newstore-common = {path = "./../../shared/common"}
 newstore-adapter = {path = "./../../shared/newstore_adapter"}
