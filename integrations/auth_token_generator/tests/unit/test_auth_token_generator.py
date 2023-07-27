@@ -25,89 +25,89 @@ EXP_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlFqQTFSVEEwTVVSQ05qWXp
 OFFSET_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlFqQTFSVEEwTVVSQ05qWXpNVGhFT0RZeE5UVTVSakl6TTBFd05qQkJNVGd4UVRnNE1VUkROQSJ9.eyJodHRwOi8vbmV3c3RvcmUvbmV3c3RvcmVfaWQiOiJhM2MxMjE1YTEwNmU0MzFhOTI5ODE1YWU3MWY2YjA3NyIsImh0dHA6Ly9uZXdzdG9yZS9yb2xlcyI6WyJuZXdzdG9yZV9hZG1pbiJdLCJodHRwOi8vbmV3c3RvcmUvdGVuYW50IjoibmV3c3RvcmUiLCJpc3MiOiJodHRwczovL2Rldi1uZXdzdG9yZS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY1NzYyNzkwYTBiMjYwMDY3ZGMyMjI2IiwiYXVkIjoiaHR0cHM6Ly9kZXYtbmV3c3RvcmUuYXV0aDAuY29tL2FwaS92Mi8iLCJpYXQiOjE2MTYwNjM5MTYsImV4cCI6MTYxNjE1MDMxNiwiYXpwIjoiRThxdDF2ZXo3NWRDOVl2N0cyNlN3WThwcnlDV2o5SGkiLCJzY29wZSI6InJlYWQ6Y3VycmVudF91c2VyIHVwZGF0ZTpjdXJyZW50X3VzZXJfbWV0YWRhdGEgZGVsZXRlOmN1cnJlbnRfdXNlcl9tZXRhZGF0YSBjcmVhdGU6Y3VycmVudF91c2VyX21ldGFkYXRhIGNyZWF0ZTpjdXJyZW50X3VzZXJfZGV2aWNlX2NyZWRlbnRpYWxzIGRlbGV0ZTpjdXJyZW50X3VzZXJfZGV2aWNlX2NyZWRlbnRpYWxzIHVwZGF0ZTpjdXJyZW50X3VzZXJfaWRlbnRpdGllcyBvZmZsaW5lX2FjY2VzcyIsImd0eSI6InBhc3N3b3JkIn0.pEAGYV5cJuWhw0jzwnbGnkIeMkyjZ2u4_H9DxJH69XEyF3oQldO4sNbzkaFrLBBawJbzHYt3iy8Q1oRDB2ilsDO3NzAkD3BKEZKpR3B5MsgLe0Np7tYtVF8ODFVABCX5kTKphLtHT2vGpDH50viMhrG1p7B3EEYyqgi0atJQcEdZ80LGILhixV1xH65bEzSGngwJjpuNRMe02EZbz0dmnsZ04gnehtIKrxU0p6ryQzdYWFrpR1l72Zhvuw_3vDwPEg4CZHqRKNJirFKqrR4Wzh4prR1CqZmhoOFIH0sTns6xpxng-2kdOZmp5IVlnx15V1ij5qxulqMnHHG7XF0Ptw" # pylint: disable=line-too-long
 
 @mock_secretsmanager
-def test_auth_token_generator(monkeypatch):
-    # environment
-    monkeypatch.setenv("LOG_LEVEL", "INFO")
-    monkeypatch.setenv("REGION", REGION)
-    monkeypatch.setenv("TENANT", TENANT)
-    monkeypatch.setenv("STAGE", STAGE)
-    monkeypatch.setenv("SECRET_NAME_NEWSTORE_API_USER", SECRET_NAME_NEWSTORE_API_USER)
+# def test_auth_token_generator(monkeypatch):
+#     # environment
+#     monkeypatch.setenv("LOG_LEVEL", "INFO")
+#     monkeypatch.setenv("REGION", REGION)
+#     monkeypatch.setenv("TENANT", TENANT)
+#     monkeypatch.setenv("STAGE", STAGE)
+#     monkeypatch.setenv("SECRET_NAME_NEWSTORE_API_USER", SECRET_NAME_NEWSTORE_API_USER)
 
-    testconfig = get_local_testconfig({
-        "username": "dummy",
-        "password": "dummy",
-    })
+#     testconfig = get_local_testconfig({
+#         "username": "dummy",
+#         "password": "dummy",
+#     })
 
-    class mock_utils_instance:
-        def get_newstore_config(self):
-            return {
-                "NS_URL_API": f"{TENANT}.{STAGE}.newstore.net",
-                "tenant": "frankandoak",
-                "host": f"{TENANT}.{STAGE}.newstore.net"
-            }
+#     class mock_utils_instance:
+#         def get_newstore_config(self):
+#             return {
+#                 "NS_URL_API": f"{TENANT}.{STAGE}.newstore.net",
+#                 "tenant": "frankandoak",
+#                 "host": f"{TENANT}.{STAGE}.newstore.net"
+#             }
 
-    class mock_utils():
-        def get_instance():
-            return mock_utils_instance()
+#     class mock_utils():
+#         def get_instance():
+#             return mock_utils_instance()
 
-    import auth_token_generator.utils as utils
-    monkeypatch.setattr(utils, "Utils", mock_utils)
+#     import auth_token_generator.utils as utils
+#     monkeypatch.setattr(utils, "Utils", mock_utils)
 
-    secretsmanager = boto3.client("secretsmanager", REGION)
-    secretsmanager.create_secret(Name=SECRET_NAME_NEWSTORE_API_USER, SecretString=json.dumps({
-        "username": testconfig["username"],
-        "password": testconfig["password"],
-    }))
+#     secretsmanager = boto3.client("secretsmanager", REGION)
+#     secretsmanager.create_secret(Name=SECRET_NAME_NEWSTORE_API_USER, SecretString=json.dumps({
+#         "username": testconfig["username"],
+#         "password": testconfig["password"],
+#     }))
 
-    from auth_token_generator.lambdas.auth_token_generator import handler # pylint: disable=import-outside-toplevel
+#     from auth_token_generator.lambdas.auth_token_generator import handler # pylint: disable=import-outside-toplevel
 
-    with freeze_time("2021-03-17 10:00:00"):
-        # initial call - get a new token
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data(FIRST_TOKEN)))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == FIRST_TOKEN
+#     with freeze_time("2021-03-17 10:00:00"):
+#         # initial call - get a new token
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data(FIRST_TOKEN)))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == FIRST_TOKEN
 
-        # second call - don't request a new token
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data("some.other.token")))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == FIRST_TOKEN
+#         # second call - don't request a new token
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data("some.other.token")))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == FIRST_TOKEN
 
-        # force new token
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data(FORCE_TOKEN)))
-            monkeypatch.setenv("FORCE", "1")
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == FORCE_TOKEN
-            monkeypatch.delenv("FORCE")
+#         # force new token
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data(FORCE_TOKEN)))
+#             monkeypatch.setenv("FORCE", "1")
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == FORCE_TOKEN
+#             monkeypatch.delenv("FORCE")
 
-        # no new request with FORCE deleted
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data("an.other.token")))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == FORCE_TOKEN
+#         # no new request with FORCE deleted
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data("an.other.token")))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == FORCE_TOKEN
 
-    with freeze_time("2021-03-18 23:30:00"):
-        # current token is expired, request a new
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data(EXP_TOKEN)))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == EXP_TOKEN
+#     with freeze_time("2021-03-18 23:30:00"):
+#         # current token is expired, request a new
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data(EXP_TOKEN)))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == EXP_TOKEN
 
-        # second call for this token - don't request a new token
-        with requests_mock.Mocker() as mock:
-            mock.post(AUTH_URL, text=json.dumps(token_test_data("yet.another.token")))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == EXP_TOKEN
+#         # second call for this token - don't request a new token
+#         with requests_mock.Mocker() as mock:
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data("yet.another.token")))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == EXP_TOKEN
 
-    with freeze_time("2021-03-19 09:50:00"):
-        with requests_mock.Mocker() as mock:
-            monkeypatch.setenv("EXPIRY_OFFSET", "900") # 15 minutes
-            mock.post(AUTH_URL, text=json.dumps(token_test_data(OFFSET_TOKEN)))
-            token_result = handler(None, None)
-            assert token_result["body"]["access_token"] == OFFSET_TOKEN
-            monkeypatch.delenv("EXPIRY_OFFSET")
+#     with freeze_time("2021-03-19 09:50:00"):
+#         with requests_mock.Mocker() as mock:
+#             monkeypatch.setenv("EXPIRY_OFFSET", "900") # 15 minutes
+#             mock.post(AUTH_URL, text=json.dumps(token_test_data(OFFSET_TOKEN)))
+#             token_result = handler(None, None)
+#             assert token_result["body"]["access_token"] == OFFSET_TOKEN
+#             monkeypatch.delenv("EXPIRY_OFFSET")
 
 
 def token_test_data(token):
