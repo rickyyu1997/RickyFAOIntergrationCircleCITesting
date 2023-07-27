@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "28bba209815a2c6a8a6f955d516f9efd3ec4f5ad369440d626092601d7fd2989"
+            "sha256": "34d0c239ba8a1e02d6e4c9f2a3c48c79760c8128b0e077a663efc9d05500b113"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -246,10 +246,6 @@
         "newstore-adapter": {
             "path": "./../../shared/newstore_adapter",
             "version": "==17.08.31"
-        },
-        "newstore-common": {
-            "path": "./../../shared/common",
-            "version": "==1.0.0"
         },
         "param-store": {
             "path": "./../../shared/3.6/param_store",
