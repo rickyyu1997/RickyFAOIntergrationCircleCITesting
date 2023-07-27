@@ -7,11 +7,6 @@ verify_ssl = true
 
 [packages]
 boto3 = "==1.17.52"
-pyjwt = "==2.0.1"
-cryptography="==3.4.7"
-newstore-common = {path = "./../../shared/common"}
-newstore-adapter = {path = "./../../shared/newstore_adapter"}
-param-store = {path = "./../../shared/3.6/param_store"}
 requests = "==2.25.1"
 
 [requires]
